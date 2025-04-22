@@ -1,24 +1,24 @@
 USE ROLE accountadmin;
-USE WAREHOUSE tasty_bytes_dbt_wh;
+USE WAREHOUSE uche_tasty_bytes_dbt_wh;
 
-CREATE OR REPLACE DATABASE tb_101; -- source
-CREATE OR REPLACE SCHEMA tb_101.raw;
+CREATE OR REPLACE DATABASE uche_tb_101; -- source
+CREATE OR REPLACE SCHEMA uche_tb_101.raw;
 
 
-CREATE OR REPLACE FILE FORMAT tb_101.public.csv_ff 
+CREATE OR REPLACE FILE FORMAT uche_tb_101.public.csv_ff 
 type = 'csv';
 
-CREATE OR REPLACE STAGE tb_101.public.s3load
+CREATE OR REPLACE STAGE uche_tb_101.public.s3load
 COMMENT = 'Quickstarts S3 Stage Connection'
 url = 's3://sfquickstarts/frostbyte_tastybytes/'
-file_format = tb_101.public.csv_ff;
+file_format = uche_tb_101.public.csv_ff;
 
 /*--
  raw zone table build 
 --*/
 
 -- country table build
-CREATE OR REPLACE TABLE tb_101.raw.country
+CREATE OR REPLACE TABLE uche_tb_101.raw.country
 (
     country_id NUMBER(18,0),
     country VARCHAR(16777216),
@@ -30,7 +30,7 @@ CREATE OR REPLACE TABLE tb_101.raw.country
 );
 
 -- franchise table build
-CREATE OR REPLACE TABLE tb_101.raw.franchise 
+CREATE OR REPLACE TABLE uche_tb_101.raw.franchise 
 (
     franchise_id NUMBER(38,0),
     first_name VARCHAR(16777216),
@@ -42,7 +42,7 @@ CREATE OR REPLACE TABLE tb_101.raw.franchise
 );
 
 -- location table build
-CREATE OR REPLACE TABLE tb_101.raw.location
+CREATE OR REPLACE TABLE uche_tb_101.raw.location
 (
     location_id NUMBER(19,0),
     placekey VARCHAR(16777216),
@@ -54,7 +54,7 @@ CREATE OR REPLACE TABLE tb_101.raw.location
 );
 
 -- menu table build
-CREATE OR REPLACE TABLE tb_101.raw.menu
+CREATE OR REPLACE TABLE uche_tb_101.raw.menu
 (
     menu_id NUMBER(19,0),
     menu_type_id NUMBER(38,0),
@@ -70,7 +70,7 @@ CREATE OR REPLACE TABLE tb_101.raw.menu
 );
 
 -- truck table build 
-CREATE OR REPLACE TABLE tb_101.raw.truck
+CREATE OR REPLACE TABLE uche_tb_101.raw.truck
 (
     truck_id NUMBER(38,0),
     menu_type_id NUMBER(38,0),
@@ -89,7 +89,7 @@ CREATE OR REPLACE TABLE tb_101.raw.truck
 );
 
 -- order_header table build
-CREATE OR REPLACE TABLE tb_101.raw.order_header
+CREATE OR REPLACE TABLE uche_tb_101.raw.order_header
 (
     order_id NUMBER(38,0),
     truck_id NUMBER(38,0),
@@ -110,7 +110,7 @@ CREATE OR REPLACE TABLE tb_101.raw.order_header
 );
 
 -- order_detail table build
-CREATE OR REPLACE TABLE tb_101.raw.order_detail 
+CREATE OR REPLACE TABLE uche_tb_101.raw.order_detail 
 (
     order_detail_id NUMBER(38,0),
     order_id NUMBER(38,0),
@@ -124,7 +124,7 @@ CREATE OR REPLACE TABLE tb_101.raw.order_detail
 );
 
 -- customer loyalty table build
-CREATE OR REPLACE TABLE tb_101.raw.customer_loyalty
+CREATE OR REPLACE TABLE uche_tb_101.raw.customer_loyalty
 (
     customer_id NUMBER(38,0),
     first_name VARCHAR(16777216),
@@ -148,36 +148,36 @@ CREATE OR REPLACE TABLE tb_101.raw.customer_loyalty
 --*/
 
 -- country table load
-COPY INTO tb_101.raw.country
-FROM @tb_101.public.s3load/raw_pos/country/;
+COPY INTO uche_tb_101.raw.country
+FROM @uche_tb_101.public.s3load/raw_pos/country/;
 
 -- franchise table load
-COPY INTO tb_101.raw.franchise
-FROM @tb_101.public.s3load/raw_pos/franchise/;
+COPY INTO uche_tb_101.raw.franchise
+FROM @uche_tb_101.public.s3load/raw_pos/franchise/;
 
 -- location table load
-COPY INTO tb_101.raw.location
-FROM @tb_101.public.s3load/raw_pos/location/;
+COPY INTO uche_tb_101.raw.location
+FROM @uche_tb_101.public.s3load/raw_pos/location/;
 
 -- menu table load
-COPY INTO tb_101.raw.menu
-FROM @tb_101.public.s3load/raw_pos/menu/;
+COPY INTO uche_tb_101.raw.menu
+FROM @uche_tb_101.public.s3load/raw_pos/menu/;
 
 -- truck table load
-COPY INTO tb_101.raw.truck
-FROM @tb_101.public.s3load/raw_pos/truck/;
+COPY INTO uche_tb_101.raw.truck
+FROM @uche_tb_101.public.s3load/raw_pos/truck/;
 
 -- customer_loyalty table load
-COPY INTO tb_101.raw.customer_loyalty
-FROM @tb_101.public.s3load/raw_customer/customer_loyalty/;
+COPY INTO uche_tb_101.raw.customer_loyalty
+FROM @uche_tb_101.public.s3load/raw_customer/customer_loyalty/;
 
 -- order_header table load
-COPY INTO tb_101.raw.order_header
-FROM @tb_101.public.s3load/raw_pos/order_header/;
+COPY INTO uche_tb_101.raw.order_header
+FROM @uche_tb_101.public.s3load/raw_pos/order_header/;
 
 -- order_detail table load
-COPY INTO tb_101.raw.order_detail
-FROM @tb_101.public.s3load/raw_pos/order_detail/;
+COPY INTO uche_tb_101.raw.order_detail
+FROM @uche_tb_101.public.s3load/raw_pos/order_detail/;
 
 -- setup completion note
-SELECT 'tb_101 setup is now complete' AS note;
+SELECT 'uche_tb_101 setup is now complete' AS note;
